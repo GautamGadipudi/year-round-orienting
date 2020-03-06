@@ -1,14 +1,8 @@
 from PIL import Image
-color_dict = {(248, 148, 18): 'open_land',
-              (255, 192, 0): 'rough_meadow',
-              (255, 255, 255): 'easy_movement_forest',
-              (2, 208, 60): 'slow_run_forest',
-              (2, 136, 40): 'walk_forest',
-              (5, 73, 24): 'impassible_vegetation',
-              (0, 0, 255): 'water',
-              (71, 51, 3): 'paved_road',
-              (0, 0, 0): 'footpath',
-              (205, 0, 101): 'out_of_bounds'}
+
+from Models.RGB import RGB
+from Models.coordinate import coordinate
+from Models.pixel import pixel
 
 def get_terrain_data(terrain_image_file, elevation_text_file):
     try:
@@ -26,8 +20,8 @@ def get_terrain_data(terrain_image_file, elevation_text_file):
         input = {}
         for i in range(500):
             for j in range(395):
-                input[(i, j)] = ((i, j, float(elev_matrix[i][j]), RGB_matrix[i][j]))
-                # input.append((RGB_matrix[i][j], (i, j, float(elev_matrix[i][j]))))
+                input[(i, j)] = \
+                    pixel(coordinate(i, j, float(elev_matrix[i][j])), RGB(RGB_matrix[i][j][0], RGB_matrix[i][j][1], RGB_matrix[i][j][2]))
     except FileNotFoundError as ferror:
         print('File not found:' + ferror)
     except Exception as error:
@@ -46,3 +40,6 @@ def get_points_to_visit(point_file):
     except Exception as error:
         print(error)
     return points_to_visit
+
+def get_commandline_params(parameters):
+    return (parameters[1], parameters[2], parameters[3], parameters[4], parameters[5])
