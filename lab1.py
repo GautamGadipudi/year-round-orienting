@@ -1,6 +1,8 @@
 import sys
 
-from input import get_points_to_visit, get_terrain_data, get_commandline_params
+from Util.heuristic import get_path
+from Util.input import get_points_to_visit, get_terrain_data, get_commandline_params
+from Util.output import draw_on_output_image
 
 terrain_data_dict = {}
 points_to_visit = []
@@ -14,14 +16,16 @@ def main():
         terrain_data_dict = get_terrain_data(img_file, elev_file)
         points_to_visit = get_points_to_visit(path_file)
 
-        for point in points_to_visit:
-            data = terrain_data_dict[point]
-            print(str(data) + '; Speed=' + str(data.get_speed(season)) + '\n')
+        result = []
+        for i in range(len(points_to_visit) - 1):
+            start = terrain_data_dict[points_to_visit[i]]
+            goal = terrain_data_dict[points_to_visit[i + 1]]
+            path = get_path(start, goal, terrain_data_dict)
+            result.extend(path)
+
+        draw_on_output_image(output_image_filename, result, img_file)
     else:
         print('Invalid arguments. Usage: python3 lab1.py terrain_image_filepath, elevation_filepath, path_filepath, season', 'output_image_filename')
 
-
-
-
-
-main()
+if __name__ == '__main__':
+    main()
