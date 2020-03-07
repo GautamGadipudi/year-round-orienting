@@ -1,3 +1,7 @@
+'''
+    Author: Gautam Gadipudi
+    Id: gg7148@rit.edu
+'''
 from PIL import Image
 
 from Models.RGB import RGB
